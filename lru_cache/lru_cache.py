@@ -1,3 +1,5 @@
+from doubly_linked_list import DoublyLinkedList
+
 class LRUCache:
     """
     Our LRUCache class keeps track of the max number of nodes it
@@ -7,7 +9,9 @@ class LRUCache:
     to every node stored in the cache.
     """
     def __init__(self, limit=10):
-        pass
+        self.storage = DoublyLinkedList()
+        self.limit = limit
+        self.cache = {}
 
     """
     Retrieves the value associated with the given key. Also
@@ -17,7 +21,34 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        pass
+        
+        current = self.storage.head
+
+        not_found = True
+
+        if self.storage.__len__() == 0:
+            return None
+        
+        while current is not None:
+
+            if key == current.value :
+
+                not_found = False
+
+                self.storage.move_to_front(current)
+
+                return self.cache.get(key)
+            
+            current = current.next
+        
+        if not_found:
+            
+            return None
+            
+
+            
+
+
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -30,4 +61,54 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-        pass
+
+        if self.storage.__len__() == 0:
+            self.storage.add_to_head(key)
+            self.cache[key] = value
+        
+        elif self.storage.__len__() < self.limit:
+
+            current = self.storage.head
+            found = False
+
+            while current is not None:
+                
+                if current.value == key:
+                    self.storage.move_to_front(current)
+                    self.cache[key] = value
+                    found = True
+                    break
+                else:
+                    current = current.next
+            
+            if found == False:
+                self.storage.add_to_head(key)
+                self.cache[key] = value
+
+        elif self.storage.__len__() == self.limit:
+
+            current = self.storage.head
+            found = False
+
+            while current is not None:
+                
+                if current.value == key:
+                    self.storage.move_to_front(current)
+                    self.cache[key] = value
+                    found = True
+                    break
+                else:
+                    current = current.next
+
+            if not found:
+                print('here', self.cache)     
+                self.cache.pop(self.storage.tail.value)
+                print('here 2', self.cache)     
+                self.storage.delete(self.storage.tail)
+                self.storage.add_to_head(key)
+                self.cache[key] = value
+                print('here 3', self.cache)     
+
+
+
+        
