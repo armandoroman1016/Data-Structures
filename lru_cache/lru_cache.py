@@ -42,7 +42,7 @@ class LRUCache:
             current = current.next
         
         if not_found:
-            
+
             return None
             
 
@@ -66,7 +66,7 @@ class LRUCache:
             self.storage.add_to_head(key)
             self.cache[key] = value
         
-        elif self.storage.__len__() < self.limit:
+        elif self.storage.__len__() <= self.limit:
 
             current = self.storage.head
             found = False
@@ -81,33 +81,17 @@ class LRUCache:
                 else:
                     current = current.next
             
-            if found == False:
-                self.storage.add_to_head(key)
-                self.cache[key] = value
-
-        elif self.storage.__len__() == self.limit:
-
-            current = self.storage.head
-            found = False
-
-            while current is not None:
-                
-                if current.value == key:
-                    self.storage.move_to_front(current)
-                    self.cache[key] = value
-                    found = True
-                    break
-                else:
-                    current = current.next
-
             if not found:
-                print('here', self.cache)     
-                self.cache.pop(self.storage.tail.value)
-                print('here 2', self.cache)     
-                self.storage.delete(self.storage.tail)
-                self.storage.add_to_head(key)
-                self.cache[key] = value
-                print('here 3', self.cache)     
+
+                if self.storage.__len__() < self.limit:
+                    self.storage.add_to_head(key)
+                    self.cache[key] = value
+                    
+                else:
+                    self.cache.pop(self.storage.tail.value)    
+                    self.storage.delete(self.storage.tail)
+                    self.storage.add_to_head(key)
+                    self.cache[key] = value
 
 
 
