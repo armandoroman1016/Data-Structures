@@ -20,6 +20,10 @@ class LRUCache:
     Returns the value associated with the key or None if the
     key-value pair doesn't exist in the cache.
     """
+# TODO SET CACHE TO HOLD A DICTIONARY WITH KEY AS KEYNAME: AND VALUE AS NODE'S KEY VALUE PAIRS
+# ? node = (key, value)
+# ? inside cache = (node[0], node) 
+
     def get(self, key):
         
         current = self.storage.head
@@ -45,11 +49,6 @@ class LRUCache:
 
             return None
             
-
-            
-
-
-
     """
     Adds the given key-value pair to the cache. The newly-
     added pair should be considered the most-recently used
@@ -86,13 +85,10 @@ class LRUCache:
                 if self.storage.__len__() < self.limit:
                     self.storage.add_to_head(key)
                     self.cache[key] = value
-                    
+
                 else:
                     self.cache.pop(self.storage.tail.value)    
                     self.storage.delete(self.storage.tail)
                     self.storage.add_to_head(key)
                     self.cache[key] = value
-
-
-
         
