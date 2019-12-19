@@ -9,11 +9,11 @@ class BinarySearchTree:
         self.value = value
         self.left = None
         self.right = None
-        self.current = self
 
     # Insert the given value into the tree
     def insert(self, value, current_tree = None):
         # If inserting we must already have a tree/root
+
         current = current_tree or self
         # if value is less than self.value go left, make a new tree/node if empty, otherwise
         # keep going (recursion)
@@ -27,7 +27,6 @@ class BinarySearchTree:
                 current = self.left
                 self.insert(value, current)
             
-
         # if greater than or equal to then go right, make a new tree/node if empty, otherwise
         # keep going.
         elif value >= current.value:
@@ -47,18 +46,50 @@ class BinarySearchTree:
 
     # Return True if the tree contains the value
     # False if it does not
-    def contains(self, target):
+    def contains(self, target, current_tree = None):
         # if target == self.value, return it
-        # go left or right based on smaller or bigger
-        pass
+        # keeping track of current tree for comparison
+        current = current_tree or self
+
+        # if target is found return True
+        if current.value == target:
+            return True
+
+        # go left if smaller
+        elif current.value >= target:
+
+            if current.left is not None:
+                current = current.left
+                return self.contains(target, current)
+            else:
+                return False
+
+        # go right if smaller
+        elif current.value <= target:
+
+            if current.right is not None:
+                current = current.right
+                return self.contains(target, current)
+            else:
+                return False
+        
+       
+
 
 
 
     # Return the maximum value found in the tree
     def get_max(self):
+        current = self
+
         # if right exists, go right
-        # otherwise return self.value
-        pass
+        while current.right is not None:
+            current = current.right
+
+        max_val = current.value
+
+        return max_val
+
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
@@ -100,7 +131,8 @@ bst.insert(7)
 bst.insert(10)
 bst.insert(6)
 
-
+print(bst.contains(10))
 
 print(bst.left.right.value)
 print(bst.right.left.value)
+print(bst.value)
