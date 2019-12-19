@@ -11,65 +11,57 @@ class BinarySearchTree:
         self.right = None
 
     # Insert the given value into the tree
-    def insert(self, value, current_tree = None):
+    def insert(self, value):
         # If inserting we must already have a tree/root
 
-        current = current_tree or self
         # if value is less than self.value go left, make a new tree/node if empty, otherwise
         # keep going (recursion)
-        if value < current.value:
+        if value < self.value:
 
-            if current.left is None:
+            if self.left is None:
                 new_tree = BinarySearchTree(value)
-                current.left = new_tree
+                self.left = new_tree
 
             else:
-                current = self.left
-                self.insert(value, current)
+                self.left.insert(value)
             
         # if greater than or equal to then go right, make a new tree/node if empty, otherwise
         # keep going.
-        elif value >= current.value:
+        elif value >= self.value:
 
-            if current.right is None:
+            if self.right is None:
                 new_tree = BinarySearchTree(value)
-                current.right = new_tree
+                self.right = new_tree
  
             else:
-                current = self.right
-                self.insert(value, current)
-
-        return
-            
-        
+                self.right.insert(value)
 
 
     # Return True if the tree contains the value
     # False if it does not
-    def contains(self, target, current_tree = None):
+    def contains(self, target):
         # if target == self.value, return it
         # keeping track of current tree for comparison
-        current = current_tree or self
 
         # if target is found return True
-        if current.value == target:
+        if self.value == target:
             return True
 
         # go left if smaller
-        elif current.value >= target:
+        elif self.value >= target:
 
-            if current.left is not None:
-                current = current.left
-                return self.contains(target, current)
+            if self.left is not None:
+                return self.left.contains(target)
+
             else:
                 return False
 
         # go right if smaller
-        elif current.value <= target:
+        elif self.value <= target:
 
-            if current.right is not None:
-                current = current.right
-                return self.contains(target, current)
+            if self.right is not None:
+                return self.right.contains(target)
+                
             else:
                 return False
         
@@ -97,7 +89,7 @@ class BinarySearchTree:
 
     def for_each(self, cb):
 
-        if self.right is None and self.left is None:
+        if self.right is None and self.left is None and self.value is not None:
             return cb(self.value)
 
         if self.left is not None:
@@ -105,8 +97,8 @@ class BinarySearchTree:
             
         if self.right is not None:
             self.right.for_each(cb)
-        
-        cb(self.value)
+
+        return cb(self.value)
 
         
 
@@ -156,4 +148,4 @@ bst.insert(6)
 def display_node(val):
     print(val)
 
-print(bst.for_each(display_node))
+# print(bst.for_each(display_node))
