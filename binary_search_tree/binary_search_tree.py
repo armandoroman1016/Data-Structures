@@ -93,8 +93,23 @@ class BinarySearchTree:
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
+
+
     def for_each(self, cb):
-        pass
+
+        if self.right is None and self.left is None:
+            return cb(self.value)
+
+        if self.left is not None:
+            self.left.for_each(cb)
+            
+        if self.right is not None:
+            self.right.for_each(cb)
+        
+        cb(self.value)
+
+        
+
 
     # DAY 2 Project -----------------------
 
@@ -131,8 +146,14 @@ bst.insert(7)
 bst.insert(10)
 bst.insert(6)
 
-print(bst.contains(10))
+# print(bst.contains(10))
 
-print(bst.left.right.value)
-print(bst.right.left.value)
-print(bst.value)
+# print(bst.left.right.value)
+# print(bst.right.left.value)
+# print(bst.value)
+
+    
+def display_node(val):
+    print(val)
+
+print(bst.for_each(display_node))
