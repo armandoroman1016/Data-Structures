@@ -27,13 +27,35 @@ class BinarySearchTree:
         
     # Return True if the tree contains the value
     # False if it does not
-    def contains(self, target, current_tree = None):
-        pass
+    def contains(self, target):
+
+        if self.value == target:
+            return True
         
+        elif target < self.value:
+            if self.left is None:
+                return False
+            
+            return self.left.contains(target)
+
+        elif target > self.value:
+            if self.right is None:
+                return False
+            
+            return self.right.contains(target)
+
        
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        current = self
+
+        max_val = current.value
+
+        while current.right is not None:
+            max_val = current.right.value
+            current = current.right
+
+        return max_val
 
 
     # Call the function `cb` on the value of each node
