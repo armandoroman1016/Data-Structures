@@ -25,29 +25,7 @@ class LRUCache:
 # ? inside cache = (node[0], node) 
 
     def get(self, key):
-        
-        current = self.storage.head
-
-        not_found = True
-
-        if self.storage.__len__() == 0:
-            return None
-        
-        while current is not None:
-
-            if key == current.value :
-
-                not_found = False
-
-                self.storage.move_to_front(current)
-
-                return self.cache.get(key)
-            
-            current = current.next
-        
-        if not_found:
-
-            return None
+        pass
             
     """
     Adds the given key-value pair to the cache. The newly-
@@ -60,35 +38,4 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-
-        if self.storage.__len__() == 0:
-            self.storage.add_to_head(key)
-            self.cache[key] = value
-        
-        elif self.storage.__len__() <= self.limit:
-
-            current = self.storage.head
-            found = False
-
-            while current is not None:
-                
-                if current.value == key:
-                    self.storage.move_to_front(current)
-                    self.cache[key] = value
-                    found = True
-                    break
-                else:
-                    current = current.next
-            
-            if not found:
-
-                if self.storage.__len__() < self.limit:
-                    self.storage.add_to_head(key)
-                    self.cache[key] = value
-
-                else:
-                    self.cache.pop(self.storage.tail.value)    
-                    self.storage.delete(self.storage.tail)
-                    self.storage.add_to_head(key)
-                    self.cache[key] = value
-        
+        pass
