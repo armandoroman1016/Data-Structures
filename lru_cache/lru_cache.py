@@ -25,7 +25,16 @@ class LRUCache:
 # ? inside cache = (node[0], node) 
 
     def get(self, key):
-        pass
+
+        if key in self.cache:
+            target_node = self.storage.get_node(key)
+            if target_node is not None:
+                self.storage.move_to_front(target_node)
+                return self.cache[key]
+
+        else:
+            return None
+            
             
     """
     Adds the given key-value pair to the cache. The newly-
@@ -38,4 +47,28 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-        pass
+
+
+        new_node = (key, value)
+
+        if key in self.cache:
+            target_node = self.storage.get_node(key)
+
+            if target_node is not None:
+                self.storage.move_to_front(target_node)
+            else:
+                self.storage.add_to_head(new_node)
+
+            self.cache[key] = value
+
+            return
+
+        if self.storage.length < self.limit:
+            self.storage.add_to_head(new_node)
+            self.cache[key] = value
+
+        elif self.storage.length == self.limit:
+            self.storage.remove_from_tail()
+            self.storage.add_to_head(new_node)
+            self.cache[key] = value
+        

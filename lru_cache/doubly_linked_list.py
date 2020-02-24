@@ -150,3 +150,15 @@ class DoublyLinkedList:
             current = current.next
 
         return max_value
+
+    def get_node(self, key):
+
+        current = self.head
+        target = None
+
+        while current is not None:
+            if current.value[0] == key:
+                target = current
+                break
+            current = current.next
+        return target 
