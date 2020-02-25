@@ -162,10 +162,5 @@ bst.insert(7)
 bst.insert(10)
 bst.insert(6)
 
-# print(bst.contains(10))
-
-# print(bst.left.right.value)
-# print(bst.right.left.value)
-# print(bst.value)
 
 print(bst.dft_print(bst))
