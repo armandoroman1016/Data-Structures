@@ -140,10 +140,10 @@ class DoublyLinkedList:
         if current_node is None:
            return max_val
         
-        if current_node:
-            if current_node.value > max_val:
-                max_val = current_node.value
-
-            current_node = current_node.next
+        
+        if current_node.value > max_val:
+            max_val = current_node.value
+            
+        current_node = current_node.next
         
         return self.get_max(current_node, max_val)      
