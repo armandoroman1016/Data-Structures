@@ -1,3 +1,5 @@
+from dll_queue import Queue
+from dll_stack import Stack
 
 class BinarySearchTree:
     def __init__(self, value):
@@ -97,14 +99,50 @@ class BinarySearchTree:
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        
-        
-        pass
+        # initialize queue
+        queue = Queue()
+
+        # add node to queue for our while loop
+        queue.enqueue(node)
+
+        while queue.size > 0:
+            
+            # grab next item from queue
+            item = queue.dequeue()
+
+            print(item.value)
+
+            # if there is a node to the left then add to the queue
+            if item.left is not None:
+                queue.enqueue(item.left)
+            
+            # if there is a node to the right the add to the queue
+            if item.right is not None: 
+                queue.enqueue(item.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        # ! Stacks - FILO - first in last out - last in first out
+        stack = Stack()
+        
+        # pushing onto stack
+        stack.push(node)
+
+        while stack.size > 0:
+
+            # grabbing node from the stack
+            item = stack.pop()
+
+            print(item.value)
+            # if there is a node on the left then add
+            if item.left:
+                stack.push(item.left)
+            
+            # if there is a node to the right then add to the stack
+            if item.right:
+                stack.push(item.right)
+
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
@@ -129,3 +167,5 @@ bst.insert(6)
 # print(bst.left.right.value)
 # print(bst.right.left.value)
 # print(bst.value)
+
+print(bst.dft_print(bst))
