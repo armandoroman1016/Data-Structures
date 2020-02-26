@@ -28,12 +28,12 @@ class LRUCache:
 
         if key in self.cache:
             # ? grabbing target node
-            target_node = self.storage.get_node(key)
+            target_node = self.cache[key]
   
             if target_node is not None:
                 # ? if the target node is a valid object, move to the front 
                 self.storage.move_to_front(target_node)
-                return self.cache[key]
+                return self.cache[key].value[1]
 
         # ? if key is not in cache return none
         else:
@@ -57,10 +57,12 @@ class LRUCache:
 
         if key in self.cache:
             # ? if key is in the cache, grab the the node from the storage
-            target_node = self.storage.get_node(key)
+            target_node = self.cache[key]
             
             if target_node is not None:
+                target_node.value = new_node
                 self.storage.move_to_front(target_node)
+
             else:
                 # ? if node wasn't in the storage create node and check length and add to it
                 if self.storage.length == self.limit:
@@ -68,17 +70,19 @@ class LRUCache:
 
                 self.storage.add_to_head(new_node)
             
-            self.cache[key] = value
+            self.cache[key] = self.storage.head
+
             return
 
         # ? when limit hasn't been reached and item hasn't been added to cache, add the new node to head and set key value pairs in cache
         if self.storage.length < self.limit:
             self.storage.add_to_head(new_node)
-            self.cache[key] = value
+            self.cache[key] = self.storage.head
 
         # ? if cache is at limit remove LRU from list and add new node to head
         elif self.storage.length == self.limit:
-            self.storage.remove_from_tail()
+            removed = self.storage.remove_from_tail()
+            self.cache.pop(removed[0])
             self.storage.add_to_head(new_node)
-            self.cache[key] = value
+            self.cache[key] = self.storage.head
         
