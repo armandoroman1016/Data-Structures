@@ -1,8 +1,5 @@
-import sys
-sys.path.append('../queue_and_stack')
 from dll_queue import Queue
 from dll_stack import Stack
-    
 
 class BinarySearchTree:
     def __init__(self, value):
@@ -11,82 +8,54 @@ class BinarySearchTree:
         self.right = None
 
     # Insert the given value into the tree
-    def insert(self, value, current_tree = None):
-        # If inserting we must already have a tree/root
+    def insert(self, value):
 
-        current = current_tree or self
-        # if value is less than self.value go left, make a new tree/node if empty, otherwise
-        # keep going (recursion)
-        if value < current.value:
-
-            if current.left is None:
-                new_tree = BinarySearchTree(value)
-                current.left = new_tree
+        if value <= self.value:
+            if self.left is not None:
+                self.left.insert(value)
 
             else:
-                current = self.left
-                self.insert(value, current)
+                new_tree = BinarySearchTree(value)
+                self.left = new_tree
+
+        elif value > self.value:
+            if self.right is not None:
+                self.right.insert(value)
             
-        # if greater than or equal to then go right, make a new tree/node if empty, otherwise
-        # keep going.
-        elif value >= current.value:
-
-            if current.right is None:
-                new_tree = BinarySearchTree(value)
-                current.right = new_tree
- 
             else:
-                current = self.right
-                self.insert(value, current)
-
-        return
+                new_tree = BinarySearchTree(value)
+                self.right = new_tree
             
         
-
-
     # Return True if the tree contains the value
     # False if it does not
-    def contains(self, target, current_tree = None):
-        # if target == self.value, return it
-        # keeping track of current tree for comparison
-        current = current_tree or self
+    def contains(self, target):
 
-        # if target is found return True
-        if current.value == target:
+        if self.value == target:
             return True
-
-        # go left if smaller
-        elif current.value >= target:
-
-            if current.left is not None:
-                current = current.left
-                return self.contains(target, current)
-            else:
-                return False
-
-        # go right if smaller
-        elif current.value <= target:
-
-            if current.right is not None:
-                current = current.right
-                return self.contains(target, current)
-            else:
-                return False
         
+        elif target < self.value:
+            if self.left is None:
+                return False
+            
+            return self.left.contains(target)
+
+        elif target > self.value:
+            if self.right is None:
+                return False
+            
+            return self.right.contains(target)
+
        
-
-
-
-
     # Return the maximum value found in the tree
     def get_max(self):
         current = self
 
-        # if right exists, go right
-        while current.right is not None:
-            current = current.right
-
         max_val = current.value
+
+        while current.right is not None:
+            max_val = current.right.value
+            current = current.right
 
         return max_val
 
@@ -94,39 +63,86 @@ class BinarySearchTree:
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
 
-
     def for_each(self, cb):
 
-        if self.right is None and self.left is None:
+        if self.left is None and self.right is None:
             return cb(self.value)
 
         if self.left is not None:
             self.left.for_each(cb)
-            
+        
+        cb(self.value)
+        
         if self.right is not None:
             self.right.for_each(cb)
         
-        cb(self.value)
-
-        
-
 
     # DAY 2 Project -----------------------
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
-    def in_order_print(self, node):
-        pass
+    def in_order_print(self, tree):
+
+        if self.left is None and self.right is None:
+            print(self.value)
+            return 
+
+        if self.left is not None:
+            self.left.in_order_print(tree)
+
+        print(self.value)
+
+        if self.right is not None:
+            self.right.in_order_print(tree)
+        
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        # initialize queue
+        queue = Queue()
+
+        # add node to queue for our while loop
+        queue.enqueue(node)
+
+        while queue.size > 0:
+            
+            # grab next item from queue
+            item = queue.dequeue()
+
+            print(item.value)
+
+            # if there is a node to the left then add to the queue
+            if item.left is not None:
+                queue.enqueue(item.left)
+            
+            # if there is a node to the right the add to the queue
+            if item.right is not None: 
+                queue.enqueue(item.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        # ! Stacks - FILO - first in last out - last in first out
+        stack = Stack()
+        
+        # pushing onto stack
+        stack.push(node)
+
+        while stack.size > 0:
+
+            # grabbing node from the stack
+            item = stack.pop()
+
+            print(item.value)
+            # if there is a node on the left then add
+            if item.left:
+                stack.push(item.left)
+            
+            # if there is a node to the right then add to the stack
+            if item.right:
+                stack.push(item.right)
+
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
@@ -146,14 +162,5 @@ bst.insert(7)
 bst.insert(10)
 bst.insert(6)
 
-# print(bst.contains(10))
 
-# print(bst.left.right.value)
-# print(bst.right.left.value)
-# print(bst.value)
-
-    
-def display_node(val):
-    print(val)
-
-print(bst.for_each(display_node))
+print(bst.dft_print(bst))

@@ -150,3 +150,4 @@ class DoublyLinkedList:
             current = current.next
 
         return max_value
+

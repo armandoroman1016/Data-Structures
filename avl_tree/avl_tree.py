@@ -9,6 +9,7 @@ class Node:
         self.right = None
 
 """
+
 A tree class to keep track of things like the
 balance factor and the rebalancing logic
 """
@@ -41,6 +42,7 @@ class AVLTree:
     """
     def update_height(self):
         pass
+    # ? recursive solution
 
     """
     Updates the balance factor on the AVLTree class
@@ -78,4 +80,39 @@ class AVLTree:
     if we need to rebalance
     """
     def insert(self, key):
-        pass
+
+        # for less confusion
+
+        # initial node case 
+        if not self.node:
+            self.node = Node(key)
+            return
+
+
+        if key < self.node.key:
+            if self.node.left:
+                self.node.left.insert(key)
+            else:
+                self.node.left = AVLTree(Node(key))
+        else:
+
+            if self.node.right:
+                self.node.right.insert(key)
+
+            else:
+                self.node.right = AVLTree(Node(key))
+    
+
+
+x = AVLTree()
+
+
+x.insert(30)
+x.insert(10)
+x.insert(20)
+x.insert(40)
+x.insert(0)
+
+x.display()
+
+

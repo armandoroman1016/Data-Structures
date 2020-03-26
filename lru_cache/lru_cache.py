@@ -25,29 +25,20 @@ class LRUCache:
 # ? inside cache = (node[0], node) 
 
     def get(self, key):
-        
-        current = self.storage.head
 
-        not_found = True
+        if key in self.cache:
+            # ? grabbing target node
+            target_node = self.cache[key]
+  
+            if target_node is not None:
+                # ? if the target node is a valid object, move to the front 
+                self.storage.move_to_front(target_node)
+                return self.cache[key].value[1]
 
-        if self.storage.__len__() == 0:
+        # ? if key is not in cache return none
+        else:
             return None
-        
-        while current is not None:
-
-            if key == current.value :
-
-                not_found = False
-
-                self.storage.move_to_front(current)
-
-                return self.cache.get(key)
             
-            current = current.next
-        
-        if not_found:
-
-            return None
             
     """
     Adds the given key-value pair to the cache. The newly-
@@ -61,34 +52,37 @@ class LRUCache:
     """
     def set(self, key, value):
 
-        if self.storage.__len__() == 0:
-            self.storage.add_to_head(key)
-            self.cache[key] = value
-        
-        elif self.storage.__len__() <= self.limit:
+        # tuple for any new node instance
+        new_node = (key, value)
 
-            current = self.storage.head
-            found = False
-
-            while current is not None:
-                
-                if current.value == key:
-                    self.storage.move_to_front(current)
-                    self.cache[key] = value
-                    found = True
-                    break
-                else:
-                    current = current.next
+        if key in self.cache:
+            # ? if key is in the cache, grab the the node from the storage
+            target_node = self.cache[key]
             
-            if not found:
+            if target_node is not None:
+                target_node.value = new_node
+                self.storage.move_to_front(target_node)
 
-                if self.storage.__len__() < self.limit:
-                    self.storage.add_to_head(key)
-                    self.cache[key] = value
+            else:
+                # ? if node wasn't in the storage create node and check length and add to it
+                if self.storage.length == self.limit:
+                    self.storage.remove_from_tail()
 
-                else:
-                    self.cache.pop(self.storage.tail.value)    
-                    self.storage.delete(self.storage.tail)
-                    self.storage.add_to_head(key)
-                    self.cache[key] = value
+                self.storage.add_to_head(new_node)
+            
+            self.cache[key] = self.storage.head
+
+            return
+
+        # ? when limit hasn't been reached and item hasn't been added to cache, add the new node to head and set key value pairs in cache
+        if self.storage.length < self.limit:
+            self.storage.add_to_head(new_node)
+            self.cache[key] = self.storage.head
+
+        # ? if cache is at limit remove LRU from list and add new node to head
+        elif self.storage.length == self.limit:
+            removed = self.storage.remove_from_tail()
+            self.cache.pop(removed[0])
+            self.storage.add_to_head(new_node)
+            self.cache[key] = self.storage.head
         
